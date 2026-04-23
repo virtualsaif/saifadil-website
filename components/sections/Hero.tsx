@@ -1,96 +1,199 @@
+"use client";
+
 import Link from "next/link";
-import { ArrowRight, Mail } from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowRight, Mail, MapPin } from "lucide-react";
 import LinkedInIcon from "@/components/icons/LinkedInIcon";
+
+const stats = [
+  { value: "22+", label: "Years in Tech" },
+  { value: "19", label: "Ecosystem Partners" },
+  { value: "10+", label: "Certifications" },
+  { value: "4", label: "Enterprise Employers" },
+];
 
 export default function Hero() {
   return (
-    <section className="max-w-5xl mx-auto px-6 pt-24 pb-20">
-      <div className="flex flex-col-reverse md:flex-row items-start justify-between gap-12">
-        <div className="flex-1">
-          {/* Eyebrow */}
-          <p
-            className="text-sm font-medium tracking-widest uppercase mb-4"
-            style={{ color: "var(--accent)" }}
+    <section className="relative min-h-[92vh] flex items-center overflow-hidden">
+      {/* Background glow blobs */}
+      <div
+        className="hero-glow"
+        style={{ top: "-100px", left: "-100px", opacity: 0.7 }}
+      />
+      <div
+        className="hero-glow"
+        style={{
+          bottom: "-200px",
+          right: "-200px",
+          background:
+            "radial-gradient(circle, rgba(124,58,237,0.08) 0%, transparent 70%)",
+          width: "500px",
+          height: "500px",
+        }}
+      />
+
+      <div className="relative max-w-5xl mx-auto px-6 w-full py-24">
+        <div className="flex flex-col md:flex-row items-start justify-between gap-16">
+          {/* Left: text */}
+          <div className="flex-1 max-w-2xl">
+            {/* Location badge */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium mb-8 border"
+              style={{
+                borderColor: "var(--border)",
+                color: "var(--muted)",
+                background: "var(--card)",
+              }}
+            >
+              <MapPin size={11} style={{ color: "var(--accent)" }} />
+              Houston, TX · Open to collaboration
+            </motion.div>
+
+            {/* Main heading */}
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="text-5xl sm:text-6xl font-bold tracking-tight leading-[1.08] mb-6"
+              style={{ color: "var(--foreground)" }}
+            >
+              Building the infrastructure that runs{" "}
+              <span className="gradient-text">AI</span>.
+            </motion.h1>
+
+            {/* Subtitle */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="text-xl leading-relaxed mb-10"
+              style={{ color: "var(--muted)" }}
+            >
+              Sr. Technology Architect with 22+ years at the intersection of
+              AI, cloud, enterprise storage, and virtualization. Currently{" "}
+              <span style={{ color: "var(--foreground)", fontWeight: 500 }}>
+                Technical Product Manager — AI Ecosystems
+              </span>{" "}
+              at IBM.
+            </motion.p>
+
+            {/* CTAs */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="flex flex-wrap gap-3 mb-16"
+            >
+              <Link
+                href="/blog"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all hover:gap-3"
+                style={{ background: "var(--accent)", color: "#fff" }}
+              >
+                Read my writing
+                <ArrowRight size={15} />
+              </Link>
+              <Link
+                href="https://www.linkedin.com/in/storagesaif/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold border transition-all hover:border-[var(--accent)] hover:text-[var(--accent)]"
+                style={{
+                  borderColor: "var(--border)",
+                  color: "var(--muted)",
+                  background: "var(--card)",
+                }}
+              >
+                <LinkedInIcon size={15} />
+                LinkedIn
+              </Link>
+              <Link
+                href="mailto:saif.adil@gmail.com"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold border transition-all hover:border-[var(--accent)] hover:text-[var(--accent)]"
+                style={{
+                  borderColor: "var(--border)",
+                  color: "var(--muted)",
+                  background: "var(--card)",
+                }}
+              >
+                <Mail size={15} />
+                Email me
+              </Link>
+            </motion.div>
+
+            {/* Stats */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.45 }}
+              className="grid grid-cols-4 gap-6 pt-8 border-t"
+              style={{ borderColor: "var(--border)" }}
+            >
+              {stats.map((s, i) => (
+                <motion.div
+                  key={s.label}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.5 + i * 0.07 }}
+                >
+                  <p
+                    className="text-2xl font-bold stat-number"
+                    style={{ color: "var(--foreground)" }}
+                  >
+                    {s.value}
+                  </p>
+                  <p className="text-xs mt-0.5" style={{ color: "var(--muted)" }}>
+                    {s.label}
+                  </p>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* Right: avatar */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.92 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="shrink-0 hidden md:block"
           >
-            Technology Architect · Houston, TX
-          </p>
-
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight leading-tight mb-6" style={{ color: "var(--foreground)" }}>
-            Building the infrastructure that runs{" "}
-            <span style={{ color: "var(--accent)" }}>AI</span>.
-          </h1>
-
-          <p className="text-lg leading-relaxed mb-8 max-w-xl" style={{ color: "var(--muted)" }}>
-            22+ years driving innovation across virtualization, cloud, enterprise
-            storage, and AI-enabled architectures. Currently Technical Product
-            Manager — AI Ecosystems at IBM.
-          </p>
-
-          {/* Stats */}
-          <div className="flex flex-wrap gap-6 mb-10">
-            {[
-              { value: "22+", label: "Years in Tech" },
-              { value: "19", label: "Ecosystem Partners" },
-              { value: "10+", label: "Certifications" },
-              { value: "3+", label: "Fortune 500 Employers" },
-            ].map((s) => (
-              <div key={s.label}>
-                <p className="text-2xl font-bold" style={{ color: "var(--foreground)" }}>
-                  {s.value}
-                </p>
-                <p className="text-xs" style={{ color: "var(--muted)" }}>
-                  {s.label}
-                </p>
+            <div className="relative">
+              <div
+                className="w-52 h-52 rounded-2xl flex items-center justify-center text-5xl font-bold border-2 relative overflow-hidden"
+                style={{
+                  background:
+                    "linear-gradient(135deg, var(--card) 0%, var(--card-hover) 100%)",
+                  borderColor: "var(--border)",
+                }}
+              >
+                {/* Gradient overlay */}
+                <div
+                  className="absolute inset-0 opacity-20"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, var(--accent) 0%, #7c3aed 100%)",
+                  }}
+                />
+                <span className="gradient-text relative z-10">SA</span>
               </div>
-            ))}
-          </div>
-
-          {/* CTAs */}
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/blog"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-colors"
-              style={{ background: "var(--accent)", color: "#fff" }}
-            >
-              Read my writing
-              <ArrowRight size={15} />
-            </Link>
-            <Link
-              href="https://www.linkedin.com/in/storagesaif/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium border transition-colors hover:border-[var(--accent)]"
-              style={{ borderColor: "var(--border)", color: "var(--muted)" }}
-            >
-              <LinkedInIcon size={15} />
-              LinkedIn
-            </Link>
-            <Link
-              href="mailto:saif.adil@gmail.com"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium border transition-colors hover:border-[var(--accent)]"
-              style={{ borderColor: "var(--border)", color: "var(--muted)" }}
-            >
-              <Mail size={15} />
-              Email me
-            </Link>
-          </div>
-        </div>
-
-        {/* Avatar placeholder */}
-        <div className="shrink-0">
-          <div
-            className="w-36 h-36 md:w-44 md:h-44 rounded-2xl flex items-center justify-center text-4xl font-bold border-2"
-            style={{
-              background: "var(--card, #f8fafc)",
-              borderColor: "var(--border)",
-              color: "var(--accent)",
-            }}
-          >
-            SA
-          </div>
-          <p className="text-xs text-center mt-2" style={{ color: "var(--muted)" }}>
-            Photo coming soon
-          </p>
+              {/* Floating badge */}
+              <div
+                className="absolute -bottom-4 -right-4 px-3 py-1.5 rounded-xl text-xs font-semibold border"
+                style={{
+                  background: "var(--background)",
+                  borderColor: "var(--border)",
+                  color: "var(--muted)",
+                }}
+              >
+                📍 Houston, TX
+              </div>
+            </div>
+            <p className="text-xs text-center mt-8" style={{ color: "var(--muted-light)" }}>
+              High-res photo coming soon
+            </p>
+          </motion.div>
         </div>
       </div>
     </section>

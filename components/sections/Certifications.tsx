@@ -1,11 +1,13 @@
+import FadeIn from "@/components/FadeIn";
+
 const certs = [
-  { name: "NVIDIA-Certified Associate: AI Operations", issuer: "NVIDIA", year: "2026" },
-  { name: "TOGAF 9", issuer: "The Open Group", year: "" },
-  { name: "VCP-DCV 3/4/5/6 · Desktop · Cloud", issuer: "VMware", year: "" },
-  { name: "AWS Certified Solution Architect", issuer: "Amazon Web Services", year: "" },
-  { name: "VEEAM Certified", issuer: "VEEAM", year: "" },
-  { name: "Nutanix Platform Professional (NPP)", issuer: "Nutanix", year: "" },
-  { name: "IBM Cloud Certification", issuer: "IBM", year: "" },
+  { name: "NVIDIA-Certified Associate: AI Operations", issuer: "NVIDIA", year: "2026", icon: "🟢" },
+  { name: "TOGAF 9", issuer: "The Open Group", year: "", icon: "🔷" },
+  { name: "VCP-DCV 3/4/5/6 · Desktop · Cloud", issuer: "VMware", year: "", icon: "⬡" },
+  { name: "AWS Certified Solution Architect", issuer: "Amazon Web Services", year: "", icon: "☁️" },
+  { name: "VEEAM Certified", issuer: "VEEAM", year: "", icon: "🔵" },
+  { name: "Nutanix Platform Professional (NPP)", issuer: "Nutanix", year: "", icon: "🟣" },
+  { name: "IBM Cloud Certification", issuer: "IBM", year: "", icon: "🔵" },
 ];
 
 const edu = [
@@ -23,59 +25,130 @@ const edu = [
 
 export default function Certifications() {
   return (
-    <section id="certifications" className="max-w-5xl mx-auto px-6 py-20 border-t" style={{ borderColor: "var(--border)" }}>
-      <div className="grid md:grid-cols-3 gap-12">
-        <div>
-          <h2 className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: "var(--accent)" }}>
-            Credentials
-          </h2>
-        </div>
+    <section
+      id="certifications"
+      className="py-24"
+      style={{ background: "var(--card)" }}
+    >
+      <div className="max-w-5xl mx-auto px-6">
+        <FadeIn>
+          <div className="mb-16">
+            <p
+              className="section-label text-xs font-semibold uppercase tracking-widest mb-3"
+              style={{ color: "var(--accent)" }}
+            >
+              Credentials
+            </p>
+            <h2
+              className="text-3xl font-bold tracking-tight"
+              style={{ color: "var(--foreground)" }}
+            >
+              Certifications & education
+            </h2>
+          </div>
+        </FadeIn>
 
-        <div className="md:col-span-2 space-y-10">
-          <div>
-            <h3 className="text-sm font-semibold mb-4" style={{ color: "var(--foreground)" }}>
+        <div className="grid md:grid-cols-2 gap-12">
+          {/* Certs */}
+          <FadeIn direction="left">
+            <h3
+              className="text-sm font-semibold uppercase tracking-wider mb-6"
+              style={{ color: "var(--muted)" }}
+            >
               Certifications
             </h3>
-            <div className="grid sm:grid-cols-2 gap-3">
+            <div className="space-y-3">
               {certs.map((c) => (
                 <div
                   key={c.name}
-                  className="p-4 rounded-xl border"
-                  style={{ borderColor: "var(--border)", background: "var(--card, #f8fafc)" }}
+                  className="card-lift flex items-center gap-4 p-4 rounded-xl border"
+                  style={{
+                    borderColor: "var(--border)",
+                    background: "var(--background)",
+                  }}
                 >
-                  <p className="text-sm font-medium" style={{ color: "var(--foreground)" }}>
-                    {c.name}
-                  </p>
-                  <p className="text-xs mt-0.5" style={{ color: "var(--muted)" }}>
-                    {c.issuer}{c.year ? ` · ${c.year}` : ""}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-sm font-semibold mb-4" style={{ color: "var(--foreground)" }}>
-              Education
-            </h3>
-            <div className="space-y-3">
-              {edu.map((e) => (
-                <div key={e.degree} className="flex justify-between items-start">
-                  <div>
-                    <p className="text-sm font-medium" style={{ color: "var(--foreground)" }}>
-                      {e.degree}
+                  <span className="text-xl shrink-0">{c.icon}</span>
+                  <div className="flex-1 min-w-0">
+                    <p
+                      className="text-sm font-medium truncate"
+                      style={{ color: "var(--foreground)" }}
+                    >
+                      {c.name}
                     </p>
-                    <p className="text-xs" style={{ color: "var(--muted)" }}>
-                      {e.school}
+                    <p className="text-xs mt-0.5" style={{ color: "var(--muted)" }}>
+                      {c.issuer}{c.year ? ` · ${c.year}` : ""}
                     </p>
                   </div>
-                  <p className="text-xs shrink-0 ml-4" style={{ color: "var(--muted)" }}>
-                    {e.period}
-                  </p>
                 </div>
               ))}
             </div>
-          </div>
+          </FadeIn>
+
+          {/* Education */}
+          <FadeIn direction="right" delay={0.1}>
+            <h3
+              className="text-sm font-semibold uppercase tracking-wider mb-6"
+              style={{ color: "var(--muted)" }}
+            >
+              Education
+            </h3>
+            <div className="space-y-4">
+              {edu.map((e) => (
+                <div
+                  key={e.degree}
+                  className="card-lift p-5 rounded-xl border"
+                  style={{
+                    borderColor: "var(--border)",
+                    background: "var(--background)",
+                  }}
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p
+                        className="font-semibold"
+                        style={{ color: "var(--foreground)" }}
+                      >
+                        {e.degree}
+                      </p>
+                      <p className="text-sm mt-1" style={{ color: "var(--muted)" }}>
+                        {e.school}
+                      </p>
+                    </div>
+                    <span
+                      className="text-xs shrink-0 font-medium"
+                      style={{ color: "var(--muted-light)" }}
+                    >
+                      {e.period}
+                    </span>
+                  </div>
+                </div>
+              ))}
+
+              {/* IBM Community writing */}
+              <div
+                className="card-lift p-5 rounded-xl border mt-8"
+                style={{
+                  borderColor: "var(--border)",
+                  background: "var(--background)",
+                }}
+              >
+                <p className="font-semibold mb-1" style={{ color: "var(--foreground)" }}>
+                  Published Technical Writing
+                </p>
+                <p className="text-sm" style={{ color: "var(--muted)" }}>
+                  IBM Community platform — GPU-free RAG-LLM deployment, AI-driven fraud
+                  detection, medical diagnosis AI on IBM Fusion with Red Hat Validated Patterns.
+                </p>
+                <a
+                  href="/blog"
+                  className="inline-block mt-3 text-xs font-semibold"
+                  style={{ color: "var(--accent)" }}
+                >
+                  Read on this site →
+                </a>
+              </div>
+            </div>
+          </FadeIn>
         </div>
       </div>
     </section>
