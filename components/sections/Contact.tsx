@@ -7,43 +7,45 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="py-24 relative overflow-hidden"
-      style={{ background: "var(--card)" }}
+      className="relative py-32 overflow-hidden"
     >
-      {/* Background glow */}
+      {/* Radial glow */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse 60% 50% at 50% 100%, var(--glow), transparent)",
+            "radial-gradient(ellipse 70% 60% at 50% 100%, var(--glow), transparent)",
         }}
       />
 
       <div className="relative max-w-5xl mx-auto px-6">
         <FadeIn>
-          <div className="max-w-2xl mx-auto text-center">
+          <div className="max-w-2xl">
             <p
-              className="section-label text-xs font-semibold uppercase tracking-widest mb-4 inline-flex items-center gap-2 justify-center"
+              className="section-label text-xs font-semibold uppercase tracking-widest mb-4"
               style={{ color: "var(--accent)" }}
             >
-              Contact
+              Let&apos;s talk
             </p>
             <h2
-              className="text-4xl font-bold tracking-tight mb-5"
+              className="text-4xl sm:text-5xl font-bold tracking-tight leading-[1.08] mb-6"
               style={{ color: "var(--foreground)" }}
             >
-              Ready to build something great?
+              If you&apos;re building AI
+              <br />
+              infrastructure, I&apos;m interested.
             </h2>
             <p
-              className="text-lg leading-relaxed mb-10"
+              className="text-lg leading-relaxed mb-12 max-w-xl"
               style={{ color: "var(--muted)" }}
             >
-              Whether you&apos;re thinking about AI adoption, enterprise storage
-              architecture, cloud strategy, or want to talk tech — I&apos;m always
-              up for a good conversation.
+              Whether you&apos;re evaluating enterprise storage for AI workloads,
+              building an AI infrastructure strategy, exploring on-premises AI
+              options, or just want to talk about what actually works in
+              production — reach out.
             </p>
 
-            <div className="flex flex-wrap justify-center gap-4">
+            <div className="flex flex-wrap gap-4">
               <Link
                 href="mailto:saif.adil@gmail.com"
                 className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl text-sm font-semibold transition-all hover:opacity-90 hover:scale-[1.02]"
@@ -60,7 +62,7 @@ export default function Contact() {
                 style={{
                   borderColor: "var(--border)",
                   color: "var(--muted)",
-                  background: "var(--background)",
+                  background: "var(--card)",
                 }}
               >
                 <LinkedInIcon size={16} />

@@ -8,10 +8,9 @@ import { Menu, X } from "lucide-react";
 
 const links = [
   { href: "/#about", label: "About" },
-  { href: "/#expertise", label: "Expertise" },
-  { href: "/#experience", label: "Experience" },
-  { href: "/projects", label: "Projects" },
-  { href: "/blog", label: "Blog" },
+  { href: "/#work", label: "Work" },
+  { href: "/#watch", label: "Videos" },
+  { href: "/blog", label: "Writing" },
   { href: "/#contact", label: "Contact" },
 ];
 
@@ -33,8 +32,11 @@ export default function Navbar() {
         background: scrolled
           ? "color-mix(in srgb, var(--background) 80%, transparent)"
           : "transparent",
-        backdropFilter: scrolled ? "blur(16px) saturate(180%)" : "none",
-        borderBottom: scrolled ? "1px solid var(--border)" : "1px solid transparent",
+        backdropFilter: scrolled ? "blur(20px) saturate(180%)" : "none",
+        WebkitBackdropFilter: scrolled ? "blur(20px) saturate(180%)" : "none",
+        borderBottom: scrolled
+          ? "1px solid var(--border)"
+          : "1px solid transparent",
       }}
     >
       <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -44,8 +46,7 @@ export default function Navbar() {
           className="font-bold text-base tracking-tight transition-opacity hover:opacity-70"
           style={{ color: "var(--foreground)" }}
         >
-          Saif Adil
-          <span className="gradient-text">.</span>
+          Saif Adil<span className="gradient-text">.</span>
         </Link>
 
         {/* Desktop nav */}
@@ -54,15 +55,13 @@ export default function Navbar() {
             <Link
               key={l.href}
               href={l.href}
-              className="px-3.5 py-2 rounded-lg text-sm transition-colors hover:text-[var(--foreground)]"
-              style={{
-                color: "var(--muted)",
-              }}
+              className="px-3.5 py-2 rounded-lg text-sm font-medium transition-colors hover:text-[var(--foreground)]"
+              style={{ color: "var(--muted)" }}
             >
               {l.label}
             </Link>
           ))}
-          <div className="ml-2">
+          <div className="ml-3">
             <ThemeToggle />
           </div>
         </nav>

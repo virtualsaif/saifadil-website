@@ -2,199 +2,167 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, Mail, MapPin } from "lucide-react";
+import { ArrowRight, Mail, Play } from "lucide-react";
 import LinkedInIcon from "@/components/icons/LinkedInIcon";
-
-const stats = [
-  { value: "22+", label: "Years in Tech" },
-  { value: "19", label: "Ecosystem Partners" },
-  { value: "10+", label: "Certifications" },
-  { value: "4", label: "Enterprise Employers" },
-];
 
 export default function Hero() {
   return (
-    <section className="relative min-h-[92vh] flex items-center overflow-hidden">
-      {/* Background glow blobs */}
+    <section className="relative min-h-[94vh] flex items-center overflow-hidden">
+      {/* Grid background */}
       <div
-        className="hero-glow"
-        style={{ top: "-100px", left: "-100px", opacity: 0.7 }}
+        className="absolute inset-0 grid-bg opacity-40"
+        style={{ maskImage: "radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 100%)" }}
       />
+
+      {/* Glow blobs */}
+      <div className="hero-glow" style={{ top: "-80px", left: "-120px" }} />
       <div
         className="hero-glow"
         style={{
-          bottom: "-200px",
-          right: "-200px",
-          background:
-            "radial-gradient(circle, rgba(124,58,237,0.08) 0%, transparent 70%)",
-          width: "500px",
-          height: "500px",
+          top: "30%",
+          right: "-180px",
+          background: "radial-gradient(circle, rgba(124,58,237,0.1) 0%, transparent 70%)",
+          width: "480px",
+          height: "480px",
         }}
       />
 
-      <div className="relative max-w-5xl mx-auto px-6 w-full py-24">
-        <div className="flex flex-col md:flex-row items-start justify-between gap-16">
-          {/* Left: text */}
-          <div className="flex-1 max-w-2xl">
-            {/* Location badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium mb-8 border"
-              style={{
-                borderColor: "var(--border)",
-                color: "var(--muted)",
-                background: "var(--card)",
-              }}
-            >
-              <MapPin size={11} style={{ color: "var(--accent)" }} />
-              Houston, TX · Open to collaboration
-            </motion.div>
-
-            {/* Main heading */}
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-5xl sm:text-6xl font-bold tracking-tight leading-[1.08] mb-6"
-              style={{ color: "var(--foreground)" }}
-            >
-              Building the infrastructure that runs{" "}
-              <span className="gradient-text">AI</span>.
-            </motion.h1>
-
-            {/* Subtitle */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-xl leading-relaxed mb-10"
-              style={{ color: "var(--muted)" }}
-            >
-              Sr. Technology Architect with 22+ years at the intersection of
-              AI, cloud, enterprise storage, and virtualization. Currently{" "}
-              <span style={{ color: "var(--foreground)", fontWeight: 500 }}>
-                Technical Product Manager — AI Ecosystems
-              </span>{" "}
-              at IBM.
-            </motion.p>
-
-            {/* CTAs */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="flex flex-wrap gap-3 mb-16"
-            >
-              <Link
-                href="/blog"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all hover:gap-3"
-                style={{ background: "var(--accent)", color: "#fff" }}
-              >
-                Read my writing
-                <ArrowRight size={15} />
-              </Link>
-              <Link
-                href="https://www.linkedin.com/in/storagesaif/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold border transition-all hover:border-[var(--accent)] hover:text-[var(--accent)]"
-                style={{
-                  borderColor: "var(--border)",
-                  color: "var(--muted)",
-                  background: "var(--card)",
-                }}
-              >
-                <LinkedInIcon size={15} />
-                LinkedIn
-              </Link>
-              <Link
-                href="mailto:saif.adil@gmail.com"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold border transition-all hover:border-[var(--accent)] hover:text-[var(--accent)]"
-                style={{
-                  borderColor: "var(--border)",
-                  color: "var(--muted)",
-                  background: "var(--card)",
-                }}
-              >
-                <Mail size={15} />
-                Email me
-              </Link>
-            </motion.div>
-
-            {/* Stats */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.45 }}
-              className="grid grid-cols-4 gap-6 pt-8 border-t"
-              style={{ borderColor: "var(--border)" }}
-            >
-              {stats.map((s, i) => (
-                <motion.div
-                  key={s.label}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.5 + i * 0.07 }}
-                >
-                  <p
-                    className="text-2xl font-bold stat-number"
-                    style={{ color: "var(--foreground)" }}
-                  >
-                    {s.value}
-                  </p>
-                  <p className="text-xs mt-0.5" style={{ color: "var(--muted)" }}>
-                    {s.label}
-                  </p>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-
-          {/* Right: avatar */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="shrink-0 hidden md:block"
+      <div className="relative max-w-5xl mx-auto px-6 w-full py-28">
+        {/* Eyebrow */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="flex items-center gap-3 mb-10"
+        >
+          <span
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium border"
+            style={{
+              borderColor: "var(--border)",
+              color: "var(--muted)",
+              background: "var(--card)",
+            }}
           >
-            <div className="relative">
-              <div
-                className="w-52 h-52 rounded-2xl flex items-center justify-center text-5xl font-bold border-2 relative overflow-hidden"
-                style={{
-                  background:
-                    "linear-gradient(135deg, var(--card) 0%, var(--card-hover) 100%)",
-                  borderColor: "var(--border)",
-                }}
+            <span
+              className="w-1.5 h-1.5 rounded-full animate-pulse"
+              style={{ background: "#22c55e" }}
+            />
+            Available for AI consulting & advisory
+          </span>
+        </motion.div>
+
+        {/* Main statement — idea first, not name first */}
+        <motion.h1
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1, ease: [0.21, 0.47, 0.32, 0.98] }}
+          className="text-6xl sm:text-7xl font-bold tracking-tight leading-[1.04] mb-8"
+          style={{ color: "var(--foreground)", maxWidth: "820px" }}
+        >
+          Enterprise AI{" "}
+          <br className="hidden sm:block" />
+          doesn&apos;t deploy{" "}
+          <span className="gradient-text">itself</span>.
+        </motion.h1>
+
+        {/* Sub-statement */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.25 }}
+          className="text-xl leading-relaxed mb-3 max-w-2xl"
+          style={{ color: "var(--muted)" }}
+        >
+          I build the foundation that makes it run — storage architectures, deployment
+          patterns, and the blueprints that turn AI proof-of-concepts into production workloads.
+        </motion.p>
+
+        {/* Identity line */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.35 }}
+          className="text-sm mb-12 font-medium"
+          style={{ color: "var(--muted-light)" }}
+        >
+          Saif Adil · Technical Product Manager, AI Ecosystems at IBM · Houston, TX
+        </motion.p>
+
+        {/* CTAs */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.38 }}
+          className="flex flex-wrap gap-3"
+        >
+          <Link
+            href="/#work"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all hover:opacity-90 hover:gap-3"
+            style={{ background: "var(--accent)", color: "#fff" }}
+          >
+            See my work
+            <ArrowRight size={15} />
+          </Link>
+          <Link
+            href="/#watch"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold border transition-all hover:border-[var(--accent)] hover:text-[var(--accent)]"
+            style={{
+              borderColor: "var(--border)",
+              color: "var(--muted)",
+              background: "var(--card)",
+            }}
+          >
+            <Play size={14} />
+            Watch on YouTube
+          </Link>
+          <Link
+            href="https://www.linkedin.com/in/storagesaif/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold border transition-all hover:border-[var(--accent)] hover:text-[var(--accent)]"
+            style={{
+              borderColor: "var(--border)",
+              color: "var(--muted)",
+              background: "var(--card)",
+            }}
+          >
+            <LinkedInIcon size={14} />
+            Connect
+          </Link>
+        </motion.div>
+
+        {/* Stats row — bottom of hero */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.55 }}
+          className="flex flex-wrap gap-x-10 gap-y-4 mt-20 pt-8 border-t"
+          style={{ borderColor: "var(--border)" }}
+        >
+          {[
+            { value: "22+", label: "Years in enterprise tech" },
+            { value: "19", label: "Ecosystem partners mapped" },
+            { value: "3", label: "Validated AI patterns deployed" },
+            { value: "IBM · HPE · VMware", label: "Core career employers" },
+          ].map((s, i) => (
+            <motion.div
+              key={s.label}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.6 + i * 0.06 }}
+            >
+              <p
+                className="text-xl font-bold stat-number"
+                style={{ color: "var(--foreground)" }}
               >
-                {/* Gradient overlay */}
-                <div
-                  className="absolute inset-0 opacity-20"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, var(--accent) 0%, #7c3aed 100%)",
-                  }}
-                />
-                <span className="gradient-text relative z-10">SA</span>
-              </div>
-              {/* Floating badge */}
-              <div
-                className="absolute -bottom-4 -right-4 px-3 py-1.5 rounded-xl text-xs font-semibold border"
-                style={{
-                  background: "var(--background)",
-                  borderColor: "var(--border)",
-                  color: "var(--muted)",
-                }}
-              >
-                📍 Houston, TX
-              </div>
-            </div>
-            <p className="text-xs text-center mt-8" style={{ color: "var(--muted-light)" }}>
-              High-res photo coming soon
-            </p>
-          </motion.div>
-        </div>
+                {s.value}
+              </p>
+              <p className="text-xs mt-0.5" style={{ color: "var(--muted)" }}>
+                {s.label}
+              </p>
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );
