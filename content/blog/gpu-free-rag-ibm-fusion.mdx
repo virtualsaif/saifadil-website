@@ -1,0 +1,84 @@
+export const metadata = {
+  title: "GPU-Free RAG on IBM Storage Fusion: What It Is and Why It Matters",
+  date: "2024-09-15",
+  excerpt:
+    "Most AI conversations start with GPUs. This one doesn't. Here's how we deployed a production-grade RAG pipeline on IBM Storage Fusion without a single GPU — and what that means for enterprises that care about data sovereignty.",
+  tags: ["AI", "RAG", "IBM Fusion", "On-Premises AI", "Storage"],
+};
+
+# GPU-Free RAG on IBM Storage Fusion: What It Is and Why It Matters
+
+Most conversations about AI infrastructure start with GPUs. NVIDIA DGX. BasePod. Hundreds of thousands of dollars in accelerated compute. That framing makes sense for training — but it's the wrong mental model for a large class of enterprise AI workloads.
+
+Specifically: inference on private data.
+
+## The Problem With the GPU-First Assumption
+
+When an enterprise wants to deploy a Retrieval-Augmented Generation (RAG) system to answer questions against internal documents — clinical records, engineering specs, contracts — they don't need to train a model. They need to:
+
+1. Embed documents into a vector store
+2. Retrieve relevant chunks at query time
+3. Send retrieved context + query to an LLM for completion
+
+Steps 1 and 3 can use quantized models (e.g., GGUF format) that run on CPU. They're slower than GPU-accelerated inference, but for many enterprise workloads — document Q&A, internal search, compliance-constrained use cases — the latency is acceptable.
+
+The implication: **you can run meaningful AI workloads on existing storage infrastructure, without new GPU investment.**
+
+## What We Built
+
+At IBM, I architected a RAG-based AI research assistant deployed on Red Hat OpenShift with:
+
+- **IBM Storage Fusion** as the persistent storage layer (with S3-compatible object and block)
+- **watsonx.ai** for generating embeddings
+- **Qdrant** as the vector database
+- **Langflow** for RAG pipeline orchestration
+- Quantized LLM serving via vLLM or Ollama on CPU nodes
+
+The system was originally developed for a major academic medical center, targeting research hospital adoption. Researchers could query across thousands of internal papers and clinical notes — without that data ever leaving the on-premises environment.
+
+## Why This Architecture Matters
+
+### Data Sovereignty
+Healthcare, finance, and government customers cannot send proprietary data to external APIs. A fully on-premises RAG pipeline with a self-hosted LLM means no data leaves the firewall — ever.
+
+### Cost Profile
+Adding a GPU node to an existing OpenShift cluster for inference is an option. But for lower-throughput workloads, running quantized models on existing CPU nodes — co-located with the storage — can reduce infrastructure spend significantly.
+
+### Validated Patterns as an Accelerator
+Red Hat Validated Patterns provide a GitOps-based framework for deploying opinionated, tested architectures. The RAG-LLM pattern we validated on IBM Storage Fusion gave field teams a repeatable deployment path — not a one-off proof of concept.
+
+## The Stack, Simplified
+
+```
+User Query
+    ↓
+Langflow (orchestration)
+    ↓
+watsonx.ai Embeddings → Qdrant (vector search)
+    ↓
+Retrieved Chunks + Query
+    ↓
+Quantized LLM (CPU inference)
+    ↓
+Response
+```
+
+All data lives on IBM Storage Fusion. All compute runs on OpenShift worker nodes. No GPU required.
+
+## What This Doesn't Cover
+
+GPU-free inference has real constraints. For large models, high concurrency, or latency-sensitive workloads, GPUs remain the right answer. This architecture is optimized for:
+
+- Low-to-medium query volume
+- Privacy-first deployment constraints
+- Customers who want to prove AI value before investing in accelerated compute
+
+## Takeaway
+
+The default assumption that "AI requires GPUs" is wrong for a meaningful portion of enterprise use cases. For RAG on private data — especially in regulated industries — the better framing is: **start with what you have, add accelerators when you need them.**
+
+IBM Storage Fusion + OpenShift + a quantized LLM gives you a production-grade starting point. From there, the upgrade path to GPU-accelerated nodes is incremental, not a rip-and-replace.
+
+---
+
+*Questions or want to dig into the architecture? [Reach out](/\#contact) or connect on [LinkedIn](https://www.linkedin.com/in/storagesaif/).*

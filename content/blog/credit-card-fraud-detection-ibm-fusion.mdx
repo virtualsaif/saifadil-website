@@ -1,0 +1,88 @@
+export const metadata = {
+  title: "Deploying AI-Driven Credit Card Fraud Detection with Red Hat Validated Patterns on IBM Fusion",
+  date: "2026-01-08",
+  excerpt:
+    "Real-time fraud detection is mission-critical for modern banking. Here's how to deploy a production-grade ML fraud detection system on IBM Fusion using Red Hat Validated Patterns — GitOps-managed, GPU-capable, and operational in minutes.",
+  tags: ["AI", "IBM Fusion", "Red Hat", "Fraud Detection", "MLOps", "OpenShift"],
+  canonical: "https://community.ibm.com/community/user/blogs/saif-adil/2026/01/08/deploying-ai-driven-credit-card-fraud-detection",
+};
+
+# Deploying AI-Driven Credit Card Fraud Detection with Red Hat Validated Patterns on IBM Fusion
+
+Modern banking demands real-time fraud detection. Every transaction is evaluated in milliseconds — and the cost of false negatives (missed fraud) is measured in direct financial losses, while false positives erode customer trust.
+
+This post walks through deploying a production-grade fraud detection system on IBM Fusion using the Red Hat Validated Patterns `mlops-fraud-detection` pattern.
+
+## Architecture
+
+The solution integrates four components:
+
+- **IBM Fusion** — container-native, hybrid cloud data platform providing compute, storage, and networking
+- **Red Hat OpenShift** — Kubernetes platform for cluster management and workload orchestration
+- **OpenShift AI** — ML model deployment and serving
+- **ArgoCD** — GitOps-based configuration management
+
+The `mlops-fraud-detection` validated pattern provides an opinionated, tested deployment blueprint that wires these together.
+
+## Deployment: Three Steps
+
+### 1. Provision the OpenShift Cluster on IBM Fusion
+
+IBM Fusion provides hyperconverged infrastructure — compute and storage in a single, unified platform. Provisioning an OpenShift cluster on Fusion is the foundation for everything that follows.
+
+### 2. Fork and Install the Pattern
+
+```bash
+git clone https://github.com/validatedpatterns/mlops-fraud-detection
+cd mlops-fraud-detection
+./pattern.sh make install
+```
+
+ArgoCD handles the rest: it continuously reconciles your cluster state against the pattern repository. Any drift gets corrected automatically.
+
+### 3. Validate via OpenShift Console
+
+Once the pattern deploys, validate components through the OpenShift console. The Fusion Dashboard provides integrated monitoring across infrastructure and application layers.
+
+## What the Model Evaluates
+
+The fraud detection model analyzes transaction characteristics in real time:
+
+- Distance from the cardholder's home
+- Transaction amount versus historical median spend
+- Merchant category
+- PIN usage (present or not)
+- Channel (online vs. in-person)
+- Deviation from established spending patterns
+
+These features feed a trained model that produces a fraud probability score per transaction — fast enough to gate authorization decisions.
+
+## Operational Benefits
+
+**Automated deployment** reduces setup time significantly versus manual configuration. The pattern handles operator installation, namespace creation, and component wiring automatically.
+
+**GitOps-based management** via ArgoCD means your production configuration is version-controlled, auditable, and reproducible. Rollbacks are git reverts.
+
+**Integrated monitoring** through the Fusion Dashboard surfaces both infrastructure metrics (storage utilization, node health) and application metrics (inference latency, throughput, model drift indicators).
+
+**GPU acceleration** is available when needed — the pattern supports GPU-enabled nodes for ML workloads that benefit from accelerated compute.
+
+## Limitations Worth Knowing
+
+The validated pattern deploys a reference fraud detection model. Production deployments will need:
+
+- Custom model training on organization-specific transaction data
+- Domain-specific monitoring thresholds tuned to your fraud base rate
+- Integration with upstream authorization systems
+
+These are expected customizations — the pattern gets you to a running baseline, not a finished product.
+
+## Resources
+
+- [Red Hat Validated Patterns](https://validatedpatterns.io/)
+- [mlops-fraud-detection repository](https://github.com/validatedpatterns/mlops-fraud-detection/tree/main)
+- [Original IBM Community post](https://community.ibm.com/community/user/blogs/saif-adil/2026/01/08/deploying-ai-driven-credit-card-fraud-detection)
+
+---
+
+*This post was originally published on the IBM Community platform. Questions? [Reach out](/\#contact) or connect on [LinkedIn](https://www.linkedin.com/in/storagesaif/).*

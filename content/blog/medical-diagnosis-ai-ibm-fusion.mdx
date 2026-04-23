@@ -1,0 +1,116 @@
+export const metadata = {
+  title: "Deploying Medical Diagnosis AI on IBM Fusion with Red Hat Validated Patterns",
+  date: "2026-02-14",
+  excerpt:
+    "Healthcare AI demands both diagnostic capability and ironclad data privacy. Here's a production-ready architecture for on-premises chest X-ray analysis — patient data stays in your datacenter, full stop.",
+  tags: ["AI", "IBM Fusion", "Red Hat", "Healthcare AI", "On-Premises AI", "OpenShift", "Data Sovereignty"],
+  canonical: "https://community.ibm.com/community/user/blogs/saif-adil/2026/02/13/deploying-medical-diagnosis-ai-on-ibm-fusion",
+};
+
+# Deploying Medical Diagnosis AI on IBM Fusion with Red Hat Validated Patterns
+
+Healthcare organizations face a difficult tradeoff when adopting AI diagnostics: the tools that could most improve patient outcomes are often built on cloud platforms that make compliance teams nervous. Patient data sent to external APIs, processed on infrastructure outside organizational control, with retention and access policies that don't align with HIPAA requirements.
+
+The architecture described here eliminates that tradeoff. **Patient data never leaves organizational boundaries.** Everything — storage, inference, orchestration, monitoring — runs on-premises on IBM Fusion.
+
+## Core Architecture
+
+Four layers compose the solution:
+
+### 1. Storage: Ceph Object Storage
+IBM Fusion's integrated Ceph object storage provides S3-compatible buckets for:
+- Raw chest X-ray images (DICOM and JPEG)
+- Trained model artifacts
+- Inference results and audit logs
+
+S3 compatibility means off-the-shelf tooling works without modification. The Fusion storage layer handles replication and data protection transparently.
+
+### 2. Messaging: Red Hat AMQ Streams (Kafka)
+Kafka decouples image ingestion from inference. When a new image lands in Ceph, an S3 event notification triggers a Kafka message. The inference service consumes from the topic — making the pipeline:
+
+- Resilient to inference service restarts
+- Observable (every image processed is a Kafka event)
+- Scalable (add inference pods to increase throughput)
+
+### 3. AI Inference: KNative Serving
+KNative Serving hosts the containerized pneumonia risk assessment model. The inference service:
+
+- Scales to zero when idle (no wasted compute)
+- Scales up automatically on incoming Kafka events
+- Produces a structured result (diagnosis probability + confidence interval)
+
+### 4. Visualization: Grafana + Prometheus
+Grafana dashboards surface both operational and clinical metrics:
+- Inference latency (p50, p95, p99)
+- Throughput (images processed per hour)
+- Model confidence distribution
+- Infrastructure health (Fusion node status, storage utilization)
+
+## Data Flow
+
+```
+Image Upload
+    ↓
+Ceph Object Storage (S3)
+    ↓
+S3 Event Notification → Kafka Topic
+    ↓
+KNative Inference Service
+    ↓
+Pneumonia Risk Score
+    ↓
+Result Storage (Ceph) + Prometheus Metrics
+    ↓
+Grafana Dashboard
+```
+
+## Deployment
+
+The Red Hat Validated Pattern for medical diagnosis handles deployment via GitOps (ArgoCD). From a running OpenShift cluster on IBM Fusion:
+
+```bash
+git clone https://github.com/storagesaif/medical-diagnosis
+cd medical-diagnosis
+./pattern.sh make install
+```
+
+ArgoCD continuously reconciles cluster state against the repository. Deployment completes in 15–30 minutes. Configuration changes are version-controlled — every modification is a git commit with an audit trail.
+
+## Why On-Premises Matters Here
+
+### Data Sovereignty
+HIPAA-covered patient data has specific requirements around where it can be processed and stored. On-premises deployment eliminates cloud egress as a compliance consideration entirely.
+
+### Cost Predictability
+Variable cloud compute costs for inference workloads can be hard to budget. A fixed capital expenditure on Fusion hardware delivers predictable cost per image processed at scale.
+
+### Regulatory Audit
+GitOps provides configuration version control that maps directly to audit requirements: who changed what, when, and why. Every deployment is traceable.
+
+## Extensibility
+
+The base pattern deploys single-model chest X-ray analysis. Natural extensions include:
+
+- **Multi-model inference** — dermatology, pathology, ECG analysis on the same infrastructure
+- **RAG-enhanced decision support** — connect inference results to clinical knowledge bases via vector databases
+- **GPU acceleration** — swap CPU-based inference nodes for GPU-enabled nodes for higher throughput or larger models
+
+## Troubleshooting Common Issues
+
+**Ceph access errors:** Verify bucket policies and ensure the inference service account has the correct S3 credentials mounted as a Kubernetes secret.
+
+**Image pull failures:** Check that the internal registry is accessible from worker nodes. IBM Fusion's network configuration may require specific firewall rules for registry traffic.
+
+**GitOps sync issues:** ArgoCD requires network access to the pattern repository. For air-gapped environments, mirror the repository to an internal Git server and update the Application manifest.
+
+**Inference service not scaling:** Confirm KNative Serving is installed and the autoscaler has access to Prometheus metrics for scaling decisions.
+
+## Resources
+
+- [Pattern Repository](https://github.com/storagesaif/medical-diagnosis)
+- [Red Hat Validated Patterns](https://validatedpatterns.io/patterns/medical-diagnosis)
+- [Original IBM Community post](https://community.ibm.com/community/user/blogs/saif-adil/2026/02/13/deploying-medical-diagnosis-ai-on-ibm-fusion)
+
+---
+
+*This post was originally published on the IBM Community platform. Questions about deploying healthcare AI on-premises? [Reach out](/\#contact) or connect on [LinkedIn](https://www.linkedin.com/in/storagesaif/).*

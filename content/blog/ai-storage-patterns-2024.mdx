@@ -1,0 +1,74 @@
+export const metadata = {
+  title: "Five Storage Patterns Every AI Architect Should Know in 2025",
+  date: "2024-11-10",
+  excerpt:
+    "AI workloads have unique storage demands that are easy to get wrong. Here are five architectural patterns — learned from production deployments — that separate AI infrastructure that scales from infrastructure that collapses under load.",
+  tags: ["AI", "Storage", "Architecture", "NVIDIA", "IBM", "Patterns"],
+};
+
+# Five Storage Patterns Every AI Architect Should Know in 2025
+
+I've spent the last two years working at the intersection of enterprise storage and AI infrastructure. One pattern keeps repeating: teams that underestimate storage end up rebuilding their AI stack six months in.
+
+Here are five storage patterns that I've seen separate successful production deployments from expensive redo's.
+
+## 1. Parallel File Access for Training
+
+Training workloads stream data constantly. The bottleneck is almost never compute — it's I/O.
+
+**The pattern:** Use a parallel filesystem (GPFS, Lustre, or BeeGFS) or a high-performance object store with a local caching layer. Avoid NFS for training datasets above a few hundred GB.
+
+**Why it matters:** A single GPU waiting on data is burning ~$3–5/hour (depending on instance). At 8 GPUs, storage-induced idle time is expensive fast.
+
+**IBM context:** IBM Storage Scale (GPFS) was designed for this. It stripes data across nodes, delivers high aggregate bandwidth, and handles the random access patterns that training jobs generate.
+
+## 2. Tiered Storage for Model Artifacts
+
+Models are large. Fine-tuned variants multiply. Checkpoints accumulate.
+
+**The pattern:** Active checkpoints on fast NVMe (or NVMe over Fabrics). Recent-but-inactive models on HDD-based object storage. Archived versions in cold storage with lifecycle policies.
+
+**What breaks without this:** Teams end up with a flat, expensive NVMe pool that's 60% checkpoints from six months ago. Or they lose checkpoints because nobody set up lifecycle management.
+
+## 3. Object Storage as the Source of Truth for Datasets
+
+Raw training data should live in object storage, not a filesystem.
+
+**The pattern:** S3-compatible object storage (IBM Storage Ceph, MinIO, or cloud-native) as the canonical dataset store. ETL pipelines pull to local scratch as needed. Datasets are versioned via prefix or bucket.
+
+**Why object:** Virtually unlimited scale, built-in redundancy, and most ML frameworks (PyTorch DataLoader, HuggingFace datasets) can stream directly from S3-compatible endpoints.
+
+## 4. Vector Store Colocation for RAG Latency
+
+For inference-time retrieval (RAG), the latency budget is tight. A 200ms vector search makes a 2-second end-to-end response feel slow.
+
+**The pattern:** Deploy the vector store (Qdrant, Milvus, Weaviate) on the same nodes as inference compute, or at minimum on the same high-bandwidth network segment. Avoid routing vector queries across datacenter fabrics.
+
+**What I've seen work:** On OpenShift, deploying Qdrant as a StatefulSet backed by IBM Storage Fusion's block storage on the same worker nodes that host the inference pods. Sub-50ms retrieval at moderate scale.
+
+## 5. CSI-Backed Persistent Volumes for Kubernetes AI Workloads
+
+Running AI on Kubernetes is now table stakes. Managing storage on Kubernetes requires treating it as a first-class concern from day one.
+
+**The pattern:** Use a CSI driver that supports `ReadWriteMany` (RWX) access mode for shared datasets. Use `ReadWriteOnce` (RWO) for model servers that need exclusive fast access. Set storage classes appropriately for each workload type.
+
+**Common mistake:** Using the default storage class (often slow, local) for model serving. Then wondering why the model server is slow to start.
+
+**IBM context:** IBM Storage Fusion ships a CSI driver that supports both RWX and RWO across its block and file tiers, with Kubernetes-native provisioning. This is what makes it a natural fit for OpenShift-based AI workloads.
+
+---
+
+## Putting It Together
+
+These patterns aren't mutually exclusive — a production AI platform typically uses all five simultaneously:
+
+```
+Training → Parallel FS + Object source-of-truth + Tiered checkpoints
+Inference → Colocated vector store + CSI-backed PVs
+```
+
+The teams that get this right early don't just have faster AI. They have AI infrastructure that can evolve — add more models, handle more users, integrate new tools — without rebuilding the foundation.
+
+---
+
+*Building an AI infrastructure stack? I write about these topics regularly. [Subscribe via RSS](/feed.xml) or [connect on LinkedIn](https://www.linkedin.com/in/storagesaif/).*
